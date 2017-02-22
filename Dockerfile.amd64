@@ -1,0 +1,21 @@
+FROM debian:sid
+
+MAINTAINER Joel DeJesus "dejesus.joel@e-flamingo.net"
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN useradd -ms /bin/bash builder
+
+RUN apt-get update && apt-get install -y git-core kernel-package gcc-arm-linux-gnueabihf \
+  build-essential libncurses5-dev bc u-boot-tools
+
+COPY run.sh /src/run.sh
+COPY config.txt /src/config.txt
+
+USER builder
+
+RUN cd /tmp/ && git clone https://github.com/raspberrypi/linux linux
+
+ENTRYPOINT ["/src/run.sh"]
+
+CMD ["rpi-4.4.y","eflamingo1"]
