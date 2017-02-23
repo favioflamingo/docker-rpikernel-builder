@@ -5,7 +5,8 @@ set -e
 case $1 in
  send)
 	echo "sending out tar of all deb packages" 1>&2
-	(cd /tmp/packages && tar -zvcf - * 2>/dev/null)
+	cd /tmp/packages
+	tar -vcf - *
 	exit 0;
  ;;
  help)

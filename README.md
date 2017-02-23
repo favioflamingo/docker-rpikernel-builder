@@ -9,8 +9,17 @@ To build:
 docker build -t rpi-builder:1 --build-arg proxy="yourrepoproxy:3142" --build-arg append="custom-test1" --build-arg branch=rpi-4.4.y --network networkofyourproxy -f Dockerfile.amd64 .
 ```
 
+If there is no local apt cache available, then just run:
+
+```
+docker build -t rpi-builder:1  --build-arg append="custom-test1" --build-arg branch=rpi-4.4.y  -f Dockerfile.amd64 .
+```
+
+
 To run:
 
 ```
-cat /tmp/myconfig.txt | docker run --rm=true --name=rpi-kernel-builder.run -v $(pwd):/tmp/target -t rpi-kernel-builder:rpi-4.4.y rpi-4.4.y customname1
+docker run --rm=true --name=rpi.run -a STDOUT rpi-builder:1 send | tar -xvf - -C ./
 ```
+
+The above command will deposit the deb packages in the current directory.

@@ -26,9 +26,10 @@ RUN cd /tmp/ && wget https://github.com/raspberrypi/linux/archive/$branch.zip &&
 
 
 COPY build.sh /src/build.sh
-COPY run.sh /src/run.sh
 
 RUN /src/build.sh $append
+
+COPY run.sh /src/run.sh
 
 ENTRYPOINT ["/src/run.sh"]
 
