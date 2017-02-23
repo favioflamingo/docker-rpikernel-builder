@@ -6,11 +6,11 @@ Before starting, the user building the kernel inside the container may have a di
 To build:
 
 ```
-docker build -t rpi-kernel-builder:rpi-4.4.y -f Dockerfile.amd64 .
+docker build -t rpi-builder:1 --build-arg proxy="yourrepoproxy:3142" --build-arg append="custom-test1" --build-arg branch=rpi-4.4.y --network networkofyourproxy -f Dockerfile.amd64 .
 ```
 
 To run:
 
 ```
-docker run --rm=true --name=rpi-kernel-builder.run -v $(pwd):/tmp/target -it rpi-kernel-builder:rpi-4.4.y rpi-4.4.y customname1
+cat /tmp/myconfig.txt | docker run --rm=true --name=rpi-kernel-builder.run -v $(pwd):/tmp/target -t rpi-kernel-builder:rpi-4.4.y rpi-4.4.y customname1
 ```

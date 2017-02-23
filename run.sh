@@ -2,26 +2,25 @@
 
 set -e
 
-# https://github.com/raspberrypi/linux/tree/rpi-4.4.y
-
-TARGETBRANCH=$1
-APPENDNAME=$2
-
-echo "Downloading branch=${TARGETBRANCH}" 1>&2
-
-cd /tmp/linux
-
-git fetch origin
-
-git checkout ${TARGETBRANCH}
-
-cp /src/config.txt .config
-
-DEB_HOST_ARCH=armhf
-
-make-kpkg --rootcmd fakeroot --arch arm --cross-compile arm-linux-gnueabihf- \
- --append-to-version=-${APPENDNAME} kernel_image kernel_headers kernel_source
-
-cd ..
-
-cp *.deb /tmp/target/
+case $1 in
+ send)
+	echo "sending out tar of all deb packages" 1>&2
+	(cd /tmp/packages && tar -zvcf - * 2>/dev/null)
+	exit 0;
+ ;;
+ help)
+	echo "For send" 1>&2
+	echo "( docker run ....  send ) | tar -xvzf - -C ./ " 1>&2
+	echo "For version" 1>&2
+	echo "docker run ... version" 1>&2
+	echo "This prints out the git branch that was checked out" 1>&2
+	exit 0;
+ ;;
+ version)
+	cat /tmp/branch.txt
+	exit 0;
+ ;;
+ *)
+	echo "Bad command.  Type send or help." 1>&2
+	exit 1;
+esac
